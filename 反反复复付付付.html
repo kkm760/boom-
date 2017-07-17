@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			a{
+				display:block;
+				text-decoration: none;
+				color:#fff;
+				background:pink;
+			}
+			a:hover{
+				color:red;
+			}
+			#box{
+				width:450px;
+				height:450px;
+				position:relative;
+				left:200px;
+			}
+			#box div{
+				width:20px;
+				height:20px;
+				background:pink;
+				position:absolute;
+				font-size: 10px;
+				line-height:20px;
+				text-align:center;
+			}
+			#a1{
+				width:100px;
+				height:20px;
+				border-radius:10px;
+				line-height:20px;
+				text-align:center;
+				position:relative;
+				overflow: hidden;
+			}
+			.a2{
+				width:50px;
+				height:20px;
+				line-height:20px;
+				text-align:center;
+				border-radius:10px;
+				position:absolute;
+				top:28px;
+				left:25px;
+			}
+			#a21{
+				display:none;
+			}
+			#a22{
+				top:48px;
+				display:none;
+			}
+			#a23{
+				top:68px;
+				display:none;
+			}
+		</style>
+	</head>
+	<body>
+		<a href="javascript:;" id="a1">请选择难度
+			<a href="javascript:;" class="a2" id="a21">初级</a>
+			<a href="javascript:;" class="a2" id="a22">中级</a>
+			<a href="javascript:;" class="a2" id="a23">高级</a>
+		</a>
+		<div id="box"></div>
+		<script type="text/javascript">
+			var a1 = document.getElementById('a1');
+			var a21 = document.getElementById('a21');
+			var a22 = document.getElementById('a22');
+			var a23 = document.getElementById('a23');
+			var row = 10;
+			var cell = 10;
+			var max = 100;
+			var len = 10;
+			a1.onclick = function(){
+				a21.style.display = 'block';
+				a22.style.display = 'block';
+				a23.style.display = 'block';
+			}
+			a21.onclick = function(){
+				row = 14;
+				cell = 14;
+				max = 195;
+				len = 15;
+				jishu();
+			}
+			a22.onclick = function(){
+				row = 18;
+				cell = 18;
+				max = 323;
+				len = 20;
+				jishu();
+			}
+			a23.onclick = function(){
+				row = 22;
+				cell = 22;
+				max = 483;
+				len = 25;
+				jishu();
+			}
+			
+			function jishu(){
+				var box = document.getElementById('box');
+				var boxs = [];
+				var arr = fn(max,len);
+				var str = '';
+				for(var i=0;i<row;i++){
+				boxs[i] = [];
+				}
+				for(var i=0;i<row;i++){
+					for(var j=0;j<cell;j++){
+						str += '<div style="top:'+i*21+'px;left:'+j*21+'px;"></div>'
+					}
+				}
+				box.innerHTML = str;
+				var divs = box.getElementsByTagName('div');
+				for(var i=0;i<divs.length;i++){
+					divs[i].onOff = true;
+				}
+				for(var i=0;i<arr.length;i++){
+					//divs[arr[i]].style.background = 'red';
+					divs[arr[i]].onOff = false;
+				}
+				for(var i=0;i<divs.length;i++){
+					divs[i].x = i%cell;
+					divs[i].y = Math.floor(i/row);
+					boxs[i%cell].push(divs[i]);
+					divs[i].onclick = function(){
+						//var sJ = Math.round(Math.random()*5);
+//						console.log(sJ);
+						Dii(this.x,this.y,this);
+						if(!this.onOff){
+							this.innerHTML = '';
+							this.style.background = 'red';
+							alert('炸了');
+						}else{
+							this.style.background = 'yellow';
+						}
+					}
+				}
+				function Dii(_x,_y,_this){
+					var n = 0;
+					//右
+					if(boxs[_x+1]&&boxs[_x+1][_y]&&!boxs[_x+1][_y].onOff){
+						n++;
+					}
+					//左
+					if(boxs[_x-1]&&boxs[_x-1][_y]&&!boxs[_x-1][_y].onOff){
+						n++;
+					}
+					//上
+					if(boxs[_x][_y+1]&&!boxs[_x][_y+1].onOff){
+						n++;
+					}
+					//下
+					if(boxs[_x][_y-1]&&!boxs[_x][_y-1].onOff){
+						n++;
+					}
+					//上右
+					if(boxs[_x+1]&&boxs[_x+1][_y+1]&&!boxs[_x+1][_y+1].onOff){
+						n++;
+					}
+					//上左
+					if(boxs[_x-1]&&boxs[_x-1][_y+1]&&!boxs[_x-1][_y+1].onOff){
+						n++;
+					}
+					//下右
+					if(boxs[_x+1]&&boxs[_x+1][_y-1]&&!boxs[_x+1][_y-1].onOff){
+						n++;
+					}
+					//下左
+					if(boxs[_x-1]&&boxs[_x-1][_y-1]&&!boxs[_x-1][_y-1].onOff){
+						n++;
+					}
+					if(n>0){
+						_this.innerHTML = n;
+					}
+				}
+			function fn(max,len){
+				var arr = [];
+				for(var i=0;i<len;i++){
+					var num = Math.round(Math.random()*max);
+					for(var j=0;j<arr.length;j++){
+						if(arr[j] == num){
+							arr.splice(arr.indexOf(arr[j]),1);
+							len++;
+						}
+					}
+					arr.push(num);
+				}
+				return arr;
+			}
+			}
+			
+		</script>
+	</body>
+</html>
